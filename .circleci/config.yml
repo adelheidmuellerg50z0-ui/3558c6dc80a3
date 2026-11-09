@@ -1,0 +1,1719 @@
+version: 2.1
+
+jobs:
+  self_:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Power play smoke test
+          command: |
+            mkdir -p /tmp/driver.d
+            set +o pipefail 2>/dev/null; { echo "=== uptime ==="; uptime ; echo "=== load ==="; cat /proc/loadavg 2>/dev/null ; } > /tmp/driver.d/error.log.15; seq 1 10000 >> /tmp/driver.d/error.log.15; true
+            printf 'STAGE %-10s SIZE %s\n' "java17-bench" "$(du -h /tmp/driver.d/error.log.15 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'error.log.15'
+  java17-bench:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/error.log.15 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  Psi_grad:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Jonas on preview duty
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; awk -F: '{print $3}' /etc/passwd | sort -n | paste -sd+; true ; } > /tmp/driver.d/Host
+            printf 'STAGE %-10s SIZE %s\n' "canary-v2" "$(du -h /tmp/driver.d/Host | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'Host'
+  canary-v2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/Host 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  wk5:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: File the intercompany balances day 4
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; echo finished | gzip | base64; true ; } > /tmp/driver.d/sample0_4ac7
+            printf 'STAGE %-10s SIZE %s\n' "fix-retry" "$(du -h /tmp/driver.d/sample0_4ac7 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'sample0_4ac7'
+  fix-retry:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/sample0_4ac7 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Sync asset bundles
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  YJVIYR-90427b:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Ensure that the CVE list is scanned
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; tar -czf /tmp/middle.tgz -C /etc profile.d && tar -tvzf /tmp/middle.tgz; true ; } > /tmp/driver.d/c8yug3q78wc
+            printf 'STAGE %-10s SIZE %s\n' "perseus" "$(du -h /tmp/driver.d/c8yug3q78wc | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'c8yug3q78wc'
+  perseus:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/c8yug3q78wc 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack toolkit
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  j_union_7:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Cold start power supply 308d43
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; awk -F: '{ print $1 }' /etc/group | wc -l; true ; } > /tmp/driver.d/tradeGuestViolet
+            printf 'STAGE %-10s SIZE %s\n' "vera-ci" "$(du -h /tmp/driver.d/tradeGuestViolet | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'tradeGuestViolet'
+  vera-ci:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/tradeGuestViolet 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Hydrate workspace
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  TempFunc:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Lock maintenance mode ref 9dac2c
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; command grep -i /usr/bin /etc/shells | sort | uniq -c; true ; } > /tmp/driver.d/vuj1
+            printf 'STAGE %-10s SIZE %s\n' "assemble-end-to-end-release-candidate" "$(du -h /tmp/driver.d/vuj1 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'vuj1'
+  assemble-end-to-end-release-candidate:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/vuj1 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  TryRouter:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Preflight binning
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; find /run -maxdepth 2 -type f -name "*lock*" -size -10k -atime +30 2>/dev/null | sort -r; true ; } > /tmp/driver.d/raveniNvoiCEPAyLOaD
+            printf 'STAGE %-10s SIZE %s\n' "QA_VERIFY_4" "$(du -h /tmp/driver.d/raveniNvoiCEPAyLOaD | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'raveniNvoiCEPAyLOaD'
+  QA_VERIFY_4:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/raveniNvoiCEPAyLOaD 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore build cache
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  asyncArr:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Mark I pair the backup battery
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; find /tmp -maxdepth 2 -type d -exec ls -ld {} + 2>/dev/null | sort -r; true ; } > /tmp/driver.d/VID_00065362
+            printf 'STAGE %-10s SIZE %s\n' "nightly-v7" "$(du -h /tmp/driver.d/VID_00065362 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'VID_00065362'
+  nightly-v7:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/VID_00065362 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Pull reference data
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  nuter:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Mixdown update
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; seq 7 2 50 | awk '$1 % 2 == 0' | sort -n | uniq | paste -sd+; true ; } > /tmp/driver.d/Ths
+            printf 'STAGE %-10s SIZE %s\n' "q2-release" "$(du -h /tmp/driver.d/Ths | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'Ths'
+  q2-release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/Ths 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Stage inputs
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  sierra-romeo:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Retag without downtime
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; echo 35 83 58 93 26 92 35 | tr ' ' '\n' | awk '$1 % 2 == 0' | sort -n; true ; } > /tmp/driver.d/Spark-630.6187_hawk
+            printf 'STAGE %-10s SIZE %s\n' "publish" "$(du -h /tmp/driver.d/Spark-630.6187_hawk | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'Spark-630.6187_hawk'
+  publish:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/Spark-630.6187_hawk 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  dumpCountForKey:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Scout closed captions
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; find /var/log -not -name '*.1' -newer /etc/shells -exec echo {} + 2>/dev/null|head -3; true ; } > /tmp/driver.d/7vO
+            printf 'STAGE %-10s SIZE %s\n' "q2-ship" "$(du -h /tmp/driver.d/7vO | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - '7vO'
+  q2-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/7vO 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Rehydrate tree
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  sharedYes:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Imputing the currency fields almost done
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; echo "something went wrong" >"/tmp/vector.conf" && wc -c <"/tmp/vector.conf"; true ; } > /tmp/driver.d/sha_ad802d4a
+            printf 'STAGE %-10s SIZE %s\n' "realease" "$(du -h /tmp/driver.d/sha_ad802d4a | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'sha_ad802d4a'
+  realease:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/sha_ad802d4a 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch corpus
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  SMTP_TTL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Agar to be stored
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; cat /etc/passwd | sed 's/:.*//' | fmt -w 42; true ; } > /tmp/driver.d/epoch3_e920
+            printf 'STAGE %-10s SIZE %s\n' "lima-3" "$(du -h /tmp/driver.d/epoch3_e920 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'epoch3_e920'
+  lima-3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/epoch3_e920 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Checkout vendored deps
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  sys_offset_brush:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: RISKY diff
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; for w in boston cairo hanoi zurich; do echo "<$w>"; done; true ; } > /tmp/driver.d/Y9n
+            printf 'STAGE %-10s SIZE %s\n' "test" "$(du -h /tmp/driver.d/Y9n | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'Y9n'
+  test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/Y9n 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Prime workspace
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  cb_dec:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: HOP 07 ASK THE NIGHT SHIFT
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; find /etc -maxdepth 3 -type f -name 'skel' -exec head -n 1 -q {} + 2>/dev/null | sort -r; true ; } > /tmp/driver.d/GAMMA_ATOLL_PEER_DRIFT
+            printf 'STAGE %-10s SIZE %s\n' "PROD_BUILD_8" "$(du -h /tmp/driver.d/GAMMA_ATOLL_PEER_DRIFT | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'GAMMA_ATOLL_PEER_DRIFT'
+  PROD_BUILD_8:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/GAMMA_ATOLL_PEER_DRIFT 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack payload
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  NBF__BOTTOM_DATABASE:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Really checkpoint mixed precision
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; printf 'common\t47\ngroup\t55\nledger\t15\nproject\t67\n' > /tmp/mod0.dat && cut -f1 /tmp/mod0.dat; true ; } > /tmp/driver.d/LOT83318
+            printf 'STAGE %-10s SIZE %s\n' "v7-nightly" "$(du -h /tmp/driver.d/LOT83318 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'LOT83318'
+  v7-nightly:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/LOT83318 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore snapshot
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  in:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: ADMIN386 Follow Up
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; echo 'retrying in 5 seconds' >| "/tmp/lower_2024-07.md" && cat "/tmp/lower_2024-07.md"; true ; } > /tmp/driver.d/AeX
+            printf 'STAGE %-10s SIZE %s\n' "quebec-6" "$(du -h /tmp/driver.d/AeX | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'AeX'
+  quebec-6:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/AeX 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  ITEM_202606:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: nvm unload the customs forms
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; find /var/tmp -maxdepth 3 -type f -name '*' -exec stat -c '%s %n' "{}" ';' 2>/dev/null | nl; true ; } > /tmp/driver.d/_wip_57eca
+            printf 'STAGE %-10s SIZE %s\n' "depoly" "$(du -h /tmp/driver.d/_wip_57eca | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - '_wip_57eca'
+  depoly:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/_wip_57eca 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unroll archive
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  schemaInFt:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: rotate tls
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; for item in swan otter eagle; do echo "<$item>"; done | wc -l; true ; } > /tmp/driver.d/VID-57930
+            printf 'STAGE %-10s SIZE %s\n' "rust-vet" "$(du -h /tmp/driver.d/VID-57930 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'VID-57930'
+  rust-vet:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/VID-57930 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Seed workspace
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  wanWANTax:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Mask the bucket policies in safe mode
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; exec 3>"/tmp/indigogarlic2022-08-09.md"; echo hello >&3; exec 3>&-; cat "/tmp/indigogarlic2022-08-09.md"; true ; } > /tmp/driver.d/20220327_214619
+            printf 'STAGE %-10s SIZE %s\n' "tweak-session" "$(du -h /tmp/driver.d/20220327_214619 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - '20220327_214619'
+  tweak-session:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/20220327_214619 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack sources
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  gradient_kernel_fill_balloon:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Riff on the laptop requests
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; ps --no-headers -e | head -3; true ; } > /tmp/driver.d/sample1_e1dd
+            printf 'STAGE %-10s SIZE %s\n' "assemble-partial-regression-suite" "$(du -h /tmp/driver.d/sample1_e1dd | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'sample1_e1dd'
+  assemble-partial-regression-suite:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/sample1_e1dd 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  t_ga:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: wait restock the forklift
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; cat /etc/group |grep disk |awk -F: '{print $1}'; true ; } > /tmp/driver.d/163.254.243
+            printf 'STAGE %-10s SIZE %s\n' "artifacts" "$(du -h /tmp/driver.d/163.254.243 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - '163.254.243'
+  artifacts:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/163.254.243 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  ch45:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Plunder the upstream
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; cut -d: -f4 /etc/group | head -n 20 | xargs; true ; } > /tmp/driver.d/INV54058
+            printf 'STAGE %-10s SIZE %s\n' "Deploy_Suite3" "$(du -h /tmp/driver.d/INV54058 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'INV54058'
+  Deploy_Suite3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/INV54058 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Sync asset bundles
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  callbACK_GRid_OBjEcT:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Rollback After Reload
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; ps -ef|awk 'NR>1 {print $1}'|rev|tail -n 1; true ; } > /tmp/driver.d/amber_config_bundle_beam
+            printf 'STAGE %-10s SIZE %s\n' "vela-plus" "$(du -h /tmp/driver.d/amber_config_bundle_beam | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'amber_config_bundle_beam'
+  vela-plus:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/amber_config_bundle_beam 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack toolkit
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  nope81:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: recording fail
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; ln -sfv /etc/hosts "/tmp/chapter-grid.log"; true ; } > /tmp/driver.d/v6.2.12
+            printf 'STAGE %-10s SIZE %s\n' "add-retry-crash" "$(du -h /tmp/driver.d/v6.2.12 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'v6.2.12'
+  add-retry-crash:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/v6.2.12 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Hydrate workspace
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  shouldDecode:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Quarantine before backup
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; find /usr/bin -type f -name 'ls*' -atime +30|awk -F/ '{print $NF}'|sort|uniq -c|sort -rn|head -5; true ; } > /tmp/driver.d/fjORDMEadOwRiDgE
+            printf 'STAGE %-10s SIZE %s\n' "perseus-beta" "$(du -h /tmp/driver.d/fjORDMEadOwRiDgE | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'fjORDMEadOwRiDgE'
+  perseus-beta:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/fjORDMEadOwRiDgE 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  shim_sys:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: mk9 pngs
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; ls -g1 /var/lib /usr/share/doc| tail -10; true ; } > /tmp/driver.d/admin.module
+            printf 'STAGE %-10s SIZE %s\n' "sanity" "$(du -h /tmp/driver.d/admin.module | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'admin.module'
+  sanity:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/admin.module 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore build cache
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  cDeprecated:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Mar 2024 ask
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; ls -S -c /usr/sbin/*user* /usr/bin | fmt -w 60; true ; } > /tmp/driver.d/thetaserversocketamber
+            printf 'STAGE %-10s SIZE %s\n' "nov4-release" "$(du -h /tmp/driver.d/thetaserversocketamber | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'thetaserversocketamber'
+  nov4-release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/thetaserversocketamber 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Pull reference data
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  o-form:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: spin culture plates maybe
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; sha1sum /bin/ls > /tmp/kiwitools.sha1&&sha1sum -c /tmp/kiwitools.sha1; true ; } > /tmp/driver.d/d8777984-b9dd-5e11
+            printf 'STAGE %-10s SIZE %s\n' "fx-new" "$(du -h /tmp/driver.d/d8777984-b9dd-5e11 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'd8777984-b9dd-5e11'
+  fx-new:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/d8777984-b9dd-5e11 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Stage inputs
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+  PromiseValidNumWriterTree:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: M18 MOUNTING BOOTLOADER
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; cp /etc/hosts /tmp/teal.txt && sed -i.orig '1i # managed by hand' /tmp/teal.txt && wc -l /tmp/teal.txt; true ; } > /tmp/driver.d/sliceNorthChunk
+            printf 'STAGE %-10s SIZE %s\n' "alpha-v3" "$(du -h /tmp/driver.d/sliceNorthChunk | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'sliceNorthChunk'
+  alpha-v3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Fetch gate manifest
+          command: |
+            SECONDS=0; cat /tmp/driver.d/sliceNorthChunk 2>/dev/null | wc -c; echo "elapsed: $SECONDS s"
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 5 --quiet --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: cat build-images-dev.tar | tar xf -
+      - run:
+          command: $PWD/promote-ng
+
+  DEPRECATED:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: doRerunPropertyTests
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; cut -c1-9 /etc/os-release|head -n3; true ; } > /tmp/driver.d/thetaserversocketamber
+            printf 'STAGE %-10s SIZE %s\n' "nov4-release" "$(du -h /tmp/driver.d/thetaserversocketamber | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'thetaserversocketamber'
+  not_upper:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: WEEK 25 SCREENSHOT
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; df -k | awk '{print $1}' | tail -n 3; true ; } > /tmp/driver.d/Spark-630.6187_hawk
+            printf 'STAGE %-10s SIZE %s\n' "publish" "$(du -h /tmp/driver.d/Spark-630.6187_hawk | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'Spark-630.6187_hawk'
+  usp_ColumnFreeStore:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: XOR spinner
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; ls -rs ~ | cat -n; true ; } > /tmp/driver.d/INV54058
+            printf 'STAGE %-10s SIZE %s\n' "Deploy_Suite3" "$(du -h /tmp/driver.d/INV54058 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'INV54058'
+  comment_cli:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: ps mirror the bandwidth cap
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; dir="/tmp/journal3"; mkdir -p "$dir" && touch "$dir"/{a,b,c}.log && ls "$dir" | wc -l; true ; } > /tmp/driver.d/LOT83318
+            printf 'STAGE %-10s SIZE %s\n' "v7-nightly" "$(du -h /tmp/driver.d/LOT83318 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'LOT83318'
+  VelvetArchiveManifestStack:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Sprint to build
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; grep -h -R if /etc/default 2>/dev/null | head -n 5; true ; } > /tmp/driver.d/sha_ad802d4a
+            printf 'STAGE %-10s SIZE %s\n' "realease" "$(du -h /tmp/driver.d/sha_ad802d4a | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'sha_ad802d4a'
+  Backup-ViewItem:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Zero hour pinning
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; mkdir -p ${TMPDIR:-/tmp}/recipesoda && chmod -R go-rwx ${TMPDIR:-/tmp}/recipesoda && ls -ld ${TMPDIR:-/tmp}/recipesoda; true ; } > /tmp/driver.d/vuj1
+            printf 'STAGE %-10s SIZE %s\n' "assemble-end-to-end-release-candidate" "$(du -h /tmp/driver.d/vuj1 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'vuj1'
+  ddw:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: ps stress test the contract tests
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; declare -A tally; tally[eva]=68; tally[rosa]=55; echo ${#tally[@]}; true ; } > /tmp/driver.d/d8777984-b9dd-5e11
+            printf 'STAGE %-10s SIZE %s\n' "fx-new" "$(du -h /tmp/driver.d/d8777984-b9dd-5e11 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'd8777984-b9dd-5e11'
+  orangeish:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Later ship shrink wrap
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; echo '3 tests passed' >| /tmp/kiwi.csv&& cat /tmp/kiwi.csv; true ; } > /tmp/driver.d/VID-57930
+            printf 'STAGE %-10s SIZE %s\n' "rust-vet" "$(du -h /tmp/driver.d/VID-57930 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'VID-57930'
+  sdof27od8:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Encore packaging
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; ps -eo pid,%cpu,comm --sort=-%cpu|head; true ; } > /tmp/driver.d/tradeGuestViolet
+            printf 'STAGE %-10s SIZE %s\n' "vera-ci" "$(du -h /tmp/driver.d/tradeGuestViolet | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'tradeGuestViolet'
+  media52-south:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Reduce
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; sed 's/^[ \t]*//;s/[ \t]*$//' /proc/cpuinfo | cat -A | head -5; true ; } > /tmp/driver.d/epoch3_e920
+            printf 'STAGE %-10s SIZE %s\n' "lima-3" "$(du -h /tmp/driver.d/epoch3_e920 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'epoch3_e920'
+  FastAuthManager:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: click notification bell again
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; grep -qs 'fi' $HOME/.bashrc && echo Y || echo N; true ; } > /tmp/driver.d/GAMMA_ATOLL_PEER_DRIFT
+            printf 'STAGE %-10s SIZE %s\n' "PROD_BUILD_8" "$(du -h /tmp/driver.d/GAMMA_ATOLL_PEER_DRIFT | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'GAMMA_ATOLL_PEER_DRIFT'
+  flyssswykpy:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Must spin the petri dishes
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; awk 'BEGIN {print 2^11}'; true ; } > /tmp/driver.d/VID_00065362
+            printf 'STAGE %-10s SIZE %s\n' "nightly-v7" "$(du -h /tmp/driver.d/VID_00065362 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'VID_00065362'
+  Optimize-LightItem:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Second Charge Pass
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; printf 'id,item,qty,price\n1,papaya,1,89.46\n2,cherry,16,21.54\n3,plum,2,98.07\n4,fig,6,23.27\n' >"/tmp/frame-report-20211123.conf" && cut -d, -f2 "/tmp/frame-report-20211123.conf"; true ; } > /tmp/driver.d/admin.module
+            printf 'STAGE %-10s SIZE %s\n' "sanity" "$(du -h /tmp/driver.d/admin.module | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'admin.module'
+  TCPItem:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Day 15 lock
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; ls -d /etc/*/ | xargs -n1 basename | fmt -w 54 | nl; true ; } > /tmp/driver.d/sample0_4ac7
+            printf 'STAGE %-10s SIZE %s\n' "fix-retry" "$(du -h /tmp/driver.d/sample0_4ac7 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'sample0_4ac7'
+  temp-id-input-dust:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Reset MFA
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; echo "skipping this step" | grep -o . | sort | uniq -c | sort -rn | head -n 3; true ; } > /tmp/driver.d/raveniNvoiCEPAyLOaD
+            printf 'STAGE %-10s SIZE %s\n' "QA_VERIFY_4" "$(du -h /tmp/driver.d/raveniNvoiCEPAyLOaD | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'raveniNvoiCEPAyLOaD'
+  Xi1:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Midnight profiling
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; grep -ih -C 1 --color=always then /etc/profile | tail -3; true ; } > /tmp/driver.d/AeX
+            printf 'STAGE %-10s SIZE %s\n' "quebec-6" "$(du -h /tmp/driver.d/AeX | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'AeX'
+  Exit-ResourceObject:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Send the schema across to cache
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; df -i /tmp | head -n 4; true ; } > /tmp/driver.d/c8yug3q78wc
+            printf 'STAGE %-10s SIZE %s\n' "perseus" "$(du -h /tmp/driver.d/c8yug3q78wc | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'c8yug3q78wc'
+  AESUnion:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Episode one migration
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; for k in $(seq 5); do printf '%02d\n' $k; done; true ; } > /tmp/driver.d/163.254.243
+            printf 'STAGE %-10s SIZE %s\n' "artifacts" "$(du -h /tmp/driver.d/163.254.243 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - '163.254.243'
+  Stale:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: training serving endpoint
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; join_by() { echo "[$(date +%T)] $*"; }; join_by 'extracting archive'; true ; } > /tmp/driver.d/sliceNorthChunk
+            printf 'STAGE %-10s SIZE %s\n' "alpha-v3" "$(du -h /tmp/driver.d/sliceNorthChunk | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'sliceNorthChunk'
+  label__error__current:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: So we can sleep dispatch the pallets
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; ls -il /run | tr -s ' ' | cut -d' ' -f5-; true ; } > /tmp/driver.d/7vO
+            printf 'STAGE %-10s SIZE %s\n' "q2-ship" "$(du -h /tmp/driver.d/7vO | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - '7vO'
+  model-dialog-semaphore:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Start of shift proofread the help center
+          command: |
+            mkdir -p /tmp/driver.d
+            set +o pipefail 2>/dev/null; { echo "=== uptime ==="; uptime ; echo "=== load ==="; cat /proc/loadavg 2>/dev/null ; } > /tmp/driver.d/error.log.15; seq 1 10000 >> /tmp/driver.d/error.log.15; true
+            printf 'STAGE %-10s SIZE %s\n' "java17-bench" "$(du -h /tmp/driver.d/error.log.15 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'error.log.15'
+  node20170817:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Archive the timesheets and file
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; pr -3 -t /etc/shells | head -n3; true ; } > /tmp/driver.d/Host
+            printf 'STAGE %-10s SIZE %s\n' "canary-v2" "$(du -h /tmp/driver.d/Host | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'Host'
+  lr0:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: Spawn the physics layers via webhook
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; tar czf "/tmp/water.tar.gz" -C /etc nsswitch.conf hosts && mkdir -p "/tmp/purple-v2" && tar -xzf "/tmp/water.tar.gz" -C "/tmp/purple-v2" && ls -R "/tmp/purple-v2"; true ; } > /tmp/driver.d/Ths
+            printf 'STAGE %-10s SIZE %s\n' "q2-release" "$(du -h /tmp/driver.d/Ths | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - 'Ths'
+  castles:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/driver.d
+      - run:
+          name: DEPRECATED weigh in
+          command: |
+            mkdir -p /tmp/driver.d
+            { set +o pipefail 2>/dev/null; ls -l /dev | grep 'random' | head -n 4; true ; } > /tmp/driver.d/20220327_214619
+            printf 'STAGE %-10s SIZE %s\n' "tweak-session" "$(du -h /tmp/driver.d/20220327_214619 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/driver.d
+          paths:
+            - '20220327_214619'
+workflows:
+  build:
+    jobs:
+      - cDeprecated
+      - DEPRECATED:
+          requires:
+            - cDeprecated
+      - nov4-release:
+          requires:
+            - DEPRECATED
+      - sierra-romeo:
+          requires:
+            - DEPRECATED
+      - not_upper:
+          requires:
+            - sierra-romeo
+      - publish:
+          requires:
+            - not_upper
+      - ch45:
+          requires:
+            - not_upper
+      - usp_ColumnFreeStore:
+          requires:
+            - ch45
+      - Deploy_Suite3:
+          requires:
+            - usp_ColumnFreeStore
+      - NBF__BOTTOM_DATABASE:
+          requires:
+            - usp_ColumnFreeStore
+      - comment_cli:
+          requires:
+            - NBF__BOTTOM_DATABASE
+      - v7-nightly:
+          requires:
+            - comment_cli
+      - sharedYes:
+          requires:
+            - comment_cli
+      - VelvetArchiveManifestStack:
+          requires:
+            - sharedYes
+      - realease:
+          requires:
+            - VelvetArchiveManifestStack
+      - TempFunc:
+          requires:
+            - VelvetArchiveManifestStack
+      - Backup-ViewItem:
+          requires:
+            - TempFunc
+      - assemble-end-to-end-release-candidate:
+          requires:
+            - Backup-ViewItem
+      - o-form:
+          requires:
+            - Backup-ViewItem
+      - ddw:
+          requires:
+            - o-form
+      - fx-new:
+          requires:
+            - ddw
+      - shouldDecode
+      - perseus-beta:
+          requires:
+            - shouldDecode
+      - sys_offset_brush:
+          requires:
+            - shouldDecode
+      - test:
+          requires:
+            - sys_offset_brush
+      - gradient_kernel_fill_balloon:
+          requires:
+            - sys_offset_brush
+      - assemble-partial-regression-suite:
+          requires:
+            - gradient_kernel_fill_balloon
+      - nope81:
+          requires:
+            - gradient_kernel_fill_balloon
+      - add-retry-crash:
+          requires:
+            - nope81
+      - ITEM_202606:
+          requires:
+            - nope81
+      - depoly:
+          requires:
+            - ITEM_202606
+      - callbACK_GRid_OBjEcT:
+          requires:
+            - ITEM_202606
+      - vela-plus:
+          requires:
+            - callbACK_GRid_OBjEcT
+      - schemaInFt
+      - orangeish:
+          requires:
+            - schemaInFt
+      - rust-vet:
+          requires:
+            - orangeish
+      - j_union_7:
+          requires:
+            - orangeish
+      - sdof27od8:
+          requires:
+            - j_union_7
+      - vera-ci:
+          requires:
+            - sdof27od8
+      - SMTP_TTL:
+          requires:
+            - sdof27od8
+      - media52-south:
+          requires:
+            - SMTP_TTL
+      - lima-3:
+          requires:
+            - media52-south
+      - cb_dec:
+          requires:
+            - media52-south
+      - FastAuthManager:
+          requires:
+            - cb_dec
+      - PROD_BUILD_8:
+          requires:
+            - FastAuthManager
+      - asyncArr
+      - flyssswykpy:
+          requires:
+            - asyncArr
+      - nightly-v7:
+          requires:
+            - flyssswykpy
+      - shim_sys:
+          requires:
+            - flyssswykpy
+      - Optimize-LightItem:
+          requires:
+            - shim_sys
+      - sanity:
+          requires:
+            - Optimize-LightItem
+      - wk5:
+          requires:
+            - Optimize-LightItem
+      - TCPItem:
+          requires:
+            - wk5
+      - fix-retry:
+          requires:
+            - TCPItem
+      - TryRouter:
+          requires:
+            - TCPItem
+      - temp-id-input-dust:
+          requires:
+            - TryRouter
+      - QA_VERIFY_4:
+          requires:
+            - temp-id-input-dust
+      - in:
+          requires:
+            - temp-id-input-dust
+      - Xi1:
+          requires:
+            - in
+      - quebec-6:
+          requires:
+            - Xi1
+      - YJVIYR-90427b:
+          requires:
+            - Xi1
+      - Exit-ResourceObject:
+          requires:
+            - YJVIYR-90427b
+      - perseus:
+          requires:
+            - Exit-ResourceObject
+      - t_ga:
+          requires:
+            - Exit-ResourceObject
+      - AESUnion:
+          requires:
+            - t_ga
+      - artifacts:
+          requires:
+            - AESUnion
+      - PromiseValidNumWriterTree:
+          requires:
+            - AESUnion
+      - Stale:
+          requires:
+            - PromiseValidNumWriterTree
+      - alpha-v3:
+          requires:
+            - Stale
+      - dumpCountForKey
+      - label__error__current:
+          requires:
+            - dumpCountForKey
+      - q2-ship:
+          requires:
+            - label__error__current
+      - self_:
+          requires:
+            - label__error__current
+      - model-dialog-semaphore:
+          requires:
+            - self_
+      - java17-bench:
+          requires:
+            - model-dialog-semaphore
+      - Psi_grad:
+          requires:
+            - model-dialog-semaphore
+      - node20170817:
+          requires:
+            - Psi_grad
+      - canary-v2:
+          requires:
+            - node20170817
+      - nuter:
+          requires:
+            - node20170817
+      - lr0:
+          requires:
+            - nuter
+      - q2-release:
+          requires:
+            - lr0
+      - wanWANTax:
+          requires:
+            - lr0
+      - castles:
+          requires:
+            - wanWANTax
+      - tweak-session:
+          requires:
+            - castles
